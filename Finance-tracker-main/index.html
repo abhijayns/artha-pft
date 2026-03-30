@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bravo Finance Tracker</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div class="hero-copy">
+        <h1>Artha</h1>
+        <h2>Personal Finance Tracker</h2>
+        <h3>सुखस्य मूलं धर्म: | धर्मस्य मूलं अर्थ: ||</h3>
+        <div class="hero-actions">
+          <button class="primary-button" data-scroll-target="#transaction-form">Add Transaction</button>
+          <button class="ghost-button" data-scroll-target="#report-panel">View Reports</button>
+        </div>
+      </div>
+
+      <aside class="hero-panel">
+        <div class="hero-panel-top">
+          <div class="hero-status-group">
+            <span class="status-pill" id="mode-badge">Loading</span>
+            <span class="status-pill neutral" id="user-badge">Team Bravo Demo</span>
+          </div>
+          <button class="ghost-button theme-toggle" id="theme-toggle" type="button" aria-label="Toggle color theme">Dark Mode</button>
+        </div>
+        <div class="snapshot-card">
+          <p>Total Balance</p>
+          <strong id="hero-balance">Rs. 0</strong>
+          <span id="hero-caption">Syncing tracker data...</span>
+        </div>
+      </aside>
+    </header>
+
+    <main class="dashboard-grid">
+      <section class="panel metrics-panel">
+        <div class="section-heading">
+          <div>
+            <p class="section-tag">Overview</p>
+            <h2>Financial Snapshot</h2>
+          </div>
+          <input type="month" id="report-month" aria-label="Select reporting month">
+        </div>
+
+        <div class="metrics-grid" id="metrics-grid"></div>
+
+        <div class="mini-grid">
+          <article class="mini-panel">
+            <div class="panel-headline">
+              <h3>Budget Pulse</h3>
+              <span id="budget-pulse-caption">0 categories</span>
+            </div>
+            <div id="budget-pulse-list" class="stack-list"></div>
+          </article>
+
+          <article class="mini-panel" id="report-panel">
+            <div class="panel-headline">
+              <h3>Monthly Report</h3>
+              <span id="report-caption">Awaiting data</span>
+            </div>
+            <div id="report-insights" class="report-grid"></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="panel form-panel">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-tag">Capture</p>
+            <h2>Record Finance Activity</h2>
+          </div>
+        </div>
+
+        <div class="setup-panel">
+          <div class="panel-headline">
+            <h3>Setup Tracker</h3>
+            <span class="section-note">Create a profile or sign in first. Each profile keeps its own finance history.</span>
+          </div>
+
+          <div class="auth-grid">
+            <form id="signin-form" class="support-form">
+              <div class="panel-headline">
+                <h3>Sign In</h3>
+              </div>
+              <div class="support-form-body">
+                <label>
+                  <span>Username</span>
+                  <input type="text" name="signinUsername" maxlength="40" placeholder="Enter username" required>
+                </label>
+                <label>
+                  <span>Password</span>
+                  <input type="password" name="signinPassword" maxlength="80" placeholder="Enter password" required>
+                </label>
+              </div>
+              <button class="ghost-button block-button" type="submit">Sign In</button>
+            </form>
+
+            <form id="signup-form" class="support-form">
+              <div class="panel-headline">
+                <h3>Create Profile</h3>
+              </div>
+              <div class="support-form-body">
+                <label>
+                  <span>Full Name</span>
+                  <input type="text" name="signupName" maxlength="80" placeholder="Enter your name" required>
+                </label>
+                <div class="form-row">
+                  <label>
+                    <span>Username</span>
+                    <input type="text" name="signupUsername" maxlength="40" placeholder="Unique username" required>
+                  </label>
+                  <label>
+                    <span>Currency</span>
+                    <select name="signupCurrency" required>
+                      <option value="INR">INR</option>
+                      <option value="USD">USD</option>
+                      <option value="EUR">EUR</option>
+                      <option value="GBP">GBP</option>
+                    </select>
+                  </label>
+                </div>
+                <label>
+                  <span>Email</span>
+                  <input type="email" name="signupEmail" maxlength="120" placeholder="name@example.com" required>
+                </label>
+                <label>
+                  <span>Password</span>
+                  <input type="password" name="signupPassword" maxlength="80" placeholder="Create password" required>
+                </label>
+              </div>
+              <button class="ghost-button block-button" type="submit">Create Profile</button>
+            </form>
+
+            <div class="support-form session-card">
+              <div class="panel-headline">
+                <h3>Current Session</h3>
+              </div>
+              <div class="support-form-body">
+                <p class="session-line" id="session-status">No profile signed in</p>
+                <p class="session-line muted" id="session-detail">Sign in to access your own transactions, budgets, goals, and history.</p>
+              </div>
+              <button class="ghost-button block-button" id="signout-button" type="button">Sign Out</button>
+            </div>
+          </div>
+
+          <div class="setup-grid">
+            <form id="profile-form" class="support-form">
+              <div class="panel-headline">
+                <h3>User Profile</h3>
+              </div>
+              <div class="support-form-body">
+                <label>
+                  <span>Name</span>
+                  <input type="text" name="userName" maxlength="80" placeholder="Enter your name" required>
+                </label>
+                <label>
+                  <span>Currency</span>
+                  <select name="currency" required>
+                    <option value="INR">INR</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                    <option value="GBP">GBP</option>
+                  </select>
+                </label>
+              </div>
+              <button class="ghost-button block-button" type="submit">Save Profile</button>
+            </form>
+
+            <form id="account-form" class="support-form">
+              <div class="panel-headline">
+                <h3>Add Account</h3>
+              </div>
+              <div class="support-form-body">
+                <label>
+                  <span>Account Name</span>
+                  <input type="text" name="accountName" maxlength="60" placeholder="Main Savings" required>
+                </label>
+                <div class="form-row">
+                  <label>
+                    <span>Type</span>
+                    <select name="accountType" required>
+                      <option value="BANK">Bank</option>
+                      <option value="CARD">Card</option>
+                      <option value="CASH">Cash</option>
+                      <option value="WALLET">Wallet</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Opening Balance</span>
+                    <input type="number" name="openingBalance" min="0" step="0.01" placeholder="0.00" required>
+                  </label>
+                </div>
+              </div>
+              <button class="ghost-button block-button" type="submit">Add Account</button>
+            </form>
+
+            <form id="category-form" class="support-form">
+              <div class="panel-headline">
+                <h3>Add Category</h3>
+              </div>
+              <div class="support-form-body">
+                <label>
+                  <span>Category Name</span>
+                  <input type="text" name="categoryName" maxlength="60" placeholder="Food" required>
+                </label>
+                <div class="form-row">
+                  <label>
+                    <span>Category Type</span>
+                    <select name="categoryType" required>
+                      <option value="EXPENSE">Expense</option>
+                      <option value="INCOME">Income</option>
+                    </select>
+                  </label>
+                  <label>
+                    <span>Default Monthly Limit</span>
+                    <input type="number" name="defaultLimit" min="0" step="0.01" placeholder="Optional">
+                  </label>
+                </div>
+              </div>
+              <button class="ghost-button block-button" type="submit">Add Category</button>
+            </form>
+          </div>
+        </div>
+
+        <form id="transaction-form" class="entry-form">
+          <div class="form-message" id="transaction-helper"></div>
+          <div class="form-row">
+            <label>
+              <span>Date</span>
+              <input type="date" name="transactionDate" required>
+            </label>
+            <label>
+              <span>Type</span>
+              <select name="transactionType" required>
+                <option value="EXPENSE">Expense</option>
+                <option value="INCOME">Income</option>
+              </select>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>
+              <span>Category</span>
+              <select name="categoryId" id="transaction-category" required></select>
+            </label>
+            <label>
+              <span>Account</span>
+              <select name="accountId" id="transaction-account" required></select>
+            </label>
+          </div>
+
+          <div class="form-row">
+            <label>
+              <span>Amount</span>
+              <input type="number" name="amount" min="1" step="0.01" placeholder="0.00" required>
+            </label>
+            <label>
+              <span>Payment Mode</span>
+              <select name="paymentMode" required>
+                <option value="UPI">UPI</option>
+                <option value="CARD">Card</option>
+                <option value="BANK_TRANSFER">Bank Transfer</option>
+                <option value="CASH">Cash</option>
+              </select>
+            </label>
+          </div>
+
+          <label>
+            <span>Description</span>
+            <input type="text" name="description" maxlength="180" placeholder="Describe the transaction" required>
+          </label>
+
+          <button class="primary-button block-button" type="submit">Save Transaction</button>
+        </form>
+
+        <div class="sub-panels">
+          <form id="budget-form" class="support-form">
+            <div class="panel-headline">
+              <h3>Budget Rule</h3>
+            </div>
+            <div class="support-form-body">
+              <label>
+                <span>Category</span>
+                <select name="categoryId" id="budget-category" required></select>
+              </label>
+              <div class="form-row budget-row">
+                <label>
+                  <span>Month</span>
+                  <input type="month" name="budgetMonth" required>
+                </label>
+                <label>
+                  <span>Limit</span>
+                  <input type="number" name="budgetLimit" min="1" step="0.01" required>
+                </label>
+              </div>
+              <label>
+                <span>Warning Threshold %</span>
+                <input type="number" name="warningPercent" min="1" max="100" value="80" required>
+              </label>
+            </div>
+            <button class="ghost-button block-button" type="submit">Save Budget</button>
+          </form>
+
+          <form id="goal-form" class="support-form">
+            <div class="panel-headline">
+              <h3>Savings Goal</h3>
+            </div>
+            <div class="support-form-body">
+              <label>
+                <span>Goal Name</span>
+                <input type="text" name="goalName" maxlength="80" placeholder="Emergency Fund" required>
+              </label>
+              <div class="form-row">
+                <label>
+                  <span>Target Amount</span>
+                  <input type="number" name="targetAmount" min="1" step="0.01" required>
+                </label>
+                <label>
+                  <span>Target Date</span>
+                  <input type="date" name="targetDate" required>
+                </label>
+              </div>
+              <div class="support-spacer"></div>
+            </div>
+            <button class="ghost-button block-button" type="submit">Add Goal</button>
+          </form>
+        </div>
+      </section>
+
+      <section class="panel ledger-panel">
+        <div class="section-heading compact">
+          <div>
+            <p class="section-tag">Activity</p>
+            <h2>Recent Transactions</h2>
+          </div>
+          <span class="section-note" id="transaction-count">0 entries</span>
+        </div>
+        <div class="activity-toolbar">
+          <div class="activity-filters">
+            <label>
+              <span>Type</span>
+              <select id="filter-type">
+                <option value="ALL">All</option>
+                <option value="INCOME">Income</option>
+                <option value="EXPENSE">Expense</option>
+              </select>
+            </label>
+            <label>
+              <span>Account</span>
+              <select id="filter-account">
+                <option value="ALL">All accounts</option>
+              </select>
+            </label>
+            <label>
+              <span>Category</span>
+              <select id="filter-category">
+                <option value="ALL">All categories</option>
+              </select>
+            </label>
+            <label>
+              <span>Month</span>
+              <input type="month" id="filter-month">
+            </label>
+            <label>
+              <span>Search</span>
+              <input type="text" id="filter-search" placeholder="Description or mode">
+            </label>
+          </div>
+          <div class="activity-actions">
+            <button class="ghost-button activity-button" id="clear-filters" type="button">Clear Filters</button>
+            <button class="primary-button activity-button" id="toggle-transactions" type="button">View All</button>
+          </div>
+        </div>
+        <div id="transaction-list" class="transaction-list"></div>
+      </section>
+    </main>
+
+  </div>
+
+  <template id="metric-card-template">
+    <article class="metric-card">
+      <p class="metric-label"></p>
+      <strong class="metric-value"></strong>
+      <span class="metric-footnote"></span>
+    </article>
+  </template>
+
+  <script src="./app.js"></script>
+</body>
+</html>
